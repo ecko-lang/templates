@@ -13,7 +13,8 @@ program. These are for when you would rather edit something that works than
 start from an empty file.
 
 `ecko scaffold` is the command that writes them, and you can copy one by hand
-instead. All five work on ecko 0.16.0.
+instead. All five need ecko 0.17.0 or newer, which is the release `ecko scaffold`
+itself ships in.
 
 ## The five templates
 
@@ -157,7 +158,7 @@ because that is the convention `import` expects.
   "name": "web",
   "about": "A web app: routes, path parameters, static files, and tests",
   "next": "ecko dev main.ecko",
-  "min_ecko": "0.16.0",
+  "min_ecko": "0.17.0",
   "files": [
     { "src": "web/ecko.json", "dest": "ecko.json", "subst": true },
     { "src": "web/app.ecko",  "dest": "app.ecko" },

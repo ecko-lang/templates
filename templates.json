@@ -5,7 +5,7 @@
       "name": "agent",
       "about": "An AI agent: a @tool the model can call, ai[T] output, and contracts",
       "next": "ecko main.ecko",
-      "min_ecko": "0.16.0",
+      "min_ecko": "0.17.0",
       "files": [
         { "src": "agent/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "agent/README.md", "dest": "README.md", "subst": true },
@@ -18,7 +18,7 @@
       "name": "web",
       "about": "A web app: routes, path parameters, static files, and tests",
       "next": "ecko dev main.ecko",
-      "min_ecko": "0.16.0",
+      "min_ecko": "0.17.0",
       "files": [
         { "src": "web/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "web/README.md", "dest": "README.md", "subst": true },
@@ -32,7 +32,7 @@
       "name": "sse",
       "about": "A streaming app: server-sent events over a channel, with a client",
       "next": "ecko dev main.ecko",
-      "min_ecko": "0.16.0",
+      "min_ecko": "0.17.0",
       "files": [
         { "src": "sse/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "sse/README.md", "dest": "README.md", "subst": true },
@@ -46,7 +46,7 @@
       "name": "cli",
       "about": "A command-line tool: options, a parsed spec, and tests",
       "next": "ecko main.ecko --help",
-      "min_ecko": "0.16.0",
+      "min_ecko": "0.17.0",
       "files": [
         { "src": "cli/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "cli/README.md", "dest": "README.md", "subst": true },
@@ -59,7 +59,7 @@
       "name": "package",
       "about": "An importable package: exports, doc comments, example, and tests",
       "next": "ecko test",
-      "min_ecko": "0.16.0",
+      "min_ecko": "0.17.0",
       "files": [
         { "src": "package/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "package/README.md", "dest": "README.md", "subst": true },
