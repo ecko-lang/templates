@@ -1,6 +1,7 @@
 # {name}
 
-A command-line tool written in Ecko.
+A command-line tool written in Ecko: options in short and long form,
+generated usage text, and tests that never touch argv.
 
 ## Run it
 
@@ -14,7 +15,11 @@ A command-line tool written in Ecko.
   which is what lets the tests call it directly.
 - `main.ecko` reads the arguments and prints the result. Change `TOOL` there to
   your own command name.
-- `tests/{name}_test.ecko` runs offline. Run it with `ecko test`.
+- `tests/{name}_test.ecko` runs offline.
+
+## Test it
+
+    ecko test
 
 ## Ship it
 

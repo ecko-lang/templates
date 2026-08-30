@@ -17,8 +17,9 @@ import std.re
 ## the result never starts or ends with one.
 export fn slugify(text) = join(re.find_all(r"[a-z0-9]+", lower(text)), "-")
 
-## excerpt(text, limit) -> `text` shortened to at most `limit` characters,
-## with an ellipsis appended when it was cut. Whole words are kept.
+## excerpt(text, limit) -> whole words from `text` up to `limit` characters,
+## with an ellipsis appended when it had to cut. The ellipsis is not counted
+## against `limit`.
 export fn excerpt(text, limit) {
     if len(text) <= limit { return text }
     words = split(text, " ")

@@ -18,7 +18,9 @@ The code does not change between the two.
 
 ## What to look at
 
-- `search_notes` is marked `@tool`, which is what lets `ai` decide to call it.
+- `search_notes` is marked `@tool`, and `research` calls it with
+  `ai "..." using [search_notes]`. Both halves matter: the attribute describes
+  the tool, the `using` list is what puts it in front of the model.
 - `triage` uses `ai[Urgency]`, so the return type is the schema and nothing
   outside the enum can come back.
 - `answer` carries `@requires` and `@ensures`. A violated `@ensures` retries
@@ -31,3 +33,6 @@ error.
 ## Test it
 
     ecko test
+
+`ecko test` forces mock mode, so the cases stay offline and deterministic even
+when `ECKO_API_KEY` is set.

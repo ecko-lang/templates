@@ -1,6 +1,6 @@
 # {name}
 
-Text helpers for building URLs and previews. A package written in Ecko.
+A package written in Ecko: text helpers for building URLs and previews.
 
 ## Before you publish
 
@@ -22,11 +22,15 @@ Two things in `ecko.json` are placeholders:
     {name}.slugify("Hello, World!")        # "hello-world"
     {name}.excerpt("a long sentence", 10)  # "a long..."
 
+`ecko example.ecko` runs the package straight from this directory, with no
+install step.
+
 ## API
 
 - `slugify(text)` reduces `text` to a lowercase, hyphen-separated slug.
-- `excerpt(text, limit)` shortens `text` to at most `limit` characters on a
-  word boundary, adding an ellipsis when it cut something.
+- `excerpt(text, limit)` keeps whole words from `text` up to `limit`
+  characters, then adds an ellipsis if it had to cut. The ellipsis is not
+  counted against `limit`.
 
 Every export carries a `##` comment. `ecko doc main.ecko` prints
 `*Undocumented.*` for any that does not, so add one whenever you add an export.

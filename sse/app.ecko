@@ -8,13 +8,14 @@ import std.web
 ## frame(data) -> one server-sent-events frame, terminator included.
 export fn frame(data) = "data: " + data + "\n\n"
 
-## feed(ch, count, delay_ms) -> sends `count` frames to `ch`, then closes it.
+## feed(ch, count, delay) -> sends `count` frames to `ch`, then closes it.
+## `delay` is in seconds, because that is what `sleep` takes.
 ## Called rather than awaited: an async fn spawns a task on call, so the
 ## handler returns its response immediately and the body fills in behind it.
-export async fn feed(ch, count, delay_ms) {
+export async fn feed(ch, count, delay) {
     for i in range(1, count + 1) {
         send(ch, frame("tick {i}"))
-        if delay_ms > 0 { sleep(delay_ms) }
+        if delay > 0 { sleep(delay) }
     }
     send(ch, frame("done"))
     close(ch)
@@ -23,7 +24,7 @@ export async fn feed(ch, count, delay_ms) {
 ## events(req) -> an SSE response whose body streams five ticks, one a second.
 export fn events(_req) {
     ch = channel()
-    feed(ch, 5, 1000)
+    feed(ch, 5, 1)
     {
         status: 200,
         headers: { "content-type": "text/event-stream", "cache-control": "no-cache" },

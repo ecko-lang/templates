@@ -1,6 +1,7 @@
 # {name}
 
-A web app written in Ecko.
+A web app written in Ecko: routes, a path parameter, static files, and tests
+that never open a socket.
 
 ## Run it
 
@@ -18,7 +19,9 @@ working directory.
 - `app.ecko` holds the routes and handlers. It binds no port, which is what
   lets the tests call the router directly.
 - `main.ecko` reads `PORT` and starts the server.
-- `static/` is served under `/static`.
+- `static/` is served under `/static`. The styling lives there rather than in
+  a `<style>` block, because braces inside the `page` template are read as
+  string interpolation.
 - `tests/{name}_test.ecko` runs offline, with no socket.
 
 ## Add a route

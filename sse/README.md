@@ -8,8 +8,8 @@ client that renders what it sends.
     cd {name}
     ecko dev main.ecko
 
-Then open http://localhost:8080 and watch the ticks arrive. Set `PORT` to serve
-somewhere else.
+Then open http://localhost:8080 and watch the ticks arrive: five of them, a
+second apart, then `done`. Set `PORT` to serve somewhere else.
 
 Run it from this directory: both the static route and the client page resolve
 against the working directory.

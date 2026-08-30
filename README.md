@@ -12,8 +12,8 @@ Nothing here is required to use Ecko. A single `.ecko` file is still a complete
 program. These are for when you would rather edit something that works than
 start from an empty file.
 
-`ecko scaffold` is the command that writes them. It is not in ecko 0.16.0, so
-until it lands you copy a template by hand. All five work on 0.16.0 today.
+`ecko scaffold` is the command that writes them, and you can copy one by hand
+instead. All five work on ecko 0.16.0.
 
 ## The five templates
 
@@ -26,9 +26,9 @@ until it lands you copy a template by hand. All five work on 0.16.0 today.
 | `package` | An importable package: exports, doc comments, example, and tests | `ecko test` |
 
 Those two columns are the `about` and `next` strings from `templates.json`, so
-they are the same words `ecko scaffold --list` will print.
+they are the same words `ecko scaffold --list` prints.
 
-## Using one today
+## Copying one by hand
 
 ```bash
 git clone https://github.com/ecko-lang/templates
@@ -42,9 +42,9 @@ ecko test
 ecko dev main.ecko
 ```
 
-That is exactly what `ecko scaffold` will do for you.
+That is exactly what `ecko scaffold` does for you.
 
-## Once `ecko scaffold` ships
+## Using `ecko scaffold`
 
 ```bash
 ecko scaffold web my-site
