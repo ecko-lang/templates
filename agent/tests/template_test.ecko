@@ -1,0 +1,28 @@
+# Tests for the agent: offline and deterministic, because `ecko test` forces
+# mock mode. Tools and typed calls are ordinary functions here.
+
+import std.test
+import "../app.ecko"
+
+test.case("the tool retrieves notes and reports their ids", fn() {
+    hit = app.search_notes("api key")
+    test.eq(len(hit.sources), 2)
+    test.ok(contains(hit.excerpt, "mock mode"))
+})
+
+test.case("a typed ai call answers inside its enum", fn() {
+    label = app.urgency_label(app.triage("is the build broken?"))
+    test.ok(contains(["low", "high"], label))
+})
+
+test.case("research reaches the tool and returns its evidence", fn() {
+    test.ok(len(app.research("mock mode").sources) > 0)
+})
+
+test.case("answer honours its @ensures contract", fn() {
+    test.ok(app.answer("what is mock mode?") != "")
+})
+
+test.case("answer rejects an empty question", fn() {
+    test.err(fn() app.answer(""))
+})

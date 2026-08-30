@@ -1,0 +1,32 @@
+# A package written in Ecko: text helpers for building URLs and previews.
+#
+#   import mypkg
+#
+#   mypkg.slugify("Hello, World!")        # "hello-world"
+#   mypkg.excerpt("a long sentence", 10)  # "a long..."
+#
+# Only `export`-marked definitions are visible to whoever imports this file.
+# Every export carries a `##` comment: `ecko doc main.ecko` prints
+# "*Undocumented.*" for any that does not, and the generated API page shows
+# the hole.
+
+import std.re
+
+## slugify(text) -> `text` reduced to a lowercase, hyphen-separated slug.
+## Runs of anything that is not a letter or digit become a single hyphen, and
+## the result never starts or ends with one.
+export fn slugify(text) = join(re.find_all(r"[a-z0-9]+", lower(text)), "-")
+
+## excerpt(text, limit) -> `text` shortened to at most `limit` characters,
+## with an ellipsis appended when it was cut. Whole words are kept.
+export fn excerpt(text, limit) {
+    if len(text) <= limit { return text }
+    words = split(text, " ")
+    out = ""
+    for w in words {
+        if len(out) + len(w) + 1 > limit { break }
+        out = if out == "" { w } else { out + " " + w }
+    }
+    if out == "" { return "..." }
+    out + "..."
+}

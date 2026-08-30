@@ -1,0 +1,9 @@
+{
+  "module": "github.com/you/{name}",
+  "version": "0.1.0",
+  "entrypoint": "main.ecko",
+  "description": "Text helpers for building URLs and previews.",
+  "license": "MIT",
+  "capabilities": [],
+  "dependencies": {}
+}

@@ -1,0 +1,13 @@
+# The entry point: bind a port and serve. Run it from this directory, because
+# the static route resolves `static/` against the working directory.
+#
+#   ecko dev main.ecko    then open http://localhost:8080
+
+import std.http
+import std.os
+import "./app.ecko"
+
+port = int(os.env_or("PORT", "8080"))
+
+print("listening on http://localhost:{port}")
+http.serve(port, app.routes())

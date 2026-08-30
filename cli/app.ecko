@@ -1,0 +1,23 @@
+# The tool's logic, kept apart from the code that starts it. Nothing here reads
+# argv or exits, so the tests can call these functions directly.
+
+import std.string
+
+## spec(name) -> the command-line specification for a tool called `name`.
+## Pass it to `cli.parse` with an argument list, or to `cli.help` for usage text.
+export fn spec(name) = {
+    name: name,
+    about: "A command-line tool written in Ecko.",
+    options: [
+        { name: "name", short: "n", help: "who to greet", default: "world" },
+        { name: "count", short: "c", help: "how many times", default: 1 },
+        { name: "loud", short: "l", flag: true, help: "shout it" },
+    ],
+}
+
+## greet(options) -> the greeting lines for a parsed `options` map, as a list.
+export fn greet(options) {
+    line = "Hello, {options.name}!"
+    if options.loud { line = string.upper(line) }
+    map(range(0, options.count), fn(_) line)
+}

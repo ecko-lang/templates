@@ -1,0 +1,7 @@
+# Run this with `ecko example.ecko` to see the package work.
+
+import "./main.ecko"
+
+print(main.slugify("Hello, World! 2026"))
+print(main.excerpt("the quick brown fox jumps over the lazy dog", 20))
+print(main.excerpt("short", 20))

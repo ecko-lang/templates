@@ -1,0 +1,44 @@
+# The routes and handlers, kept apart from the code that binds the port. The
+# router is an ordinary function, so the tests call it with plain request maps
+# and never open a socket.
+
+import std.http
+import std.web
+
+## page(title, body) -> a complete HTML document.
+## Styling lives in static/style.css: a `<style>` block's braces would be read
+## as string interpolation here.
+export template page(title, body) = """
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{title}</title>
+    <link rel="stylesheet" href="/static/style.css">
+    </head>
+    <body>
+    <h1>{title}</h1>
+    {body}
+    </body>
+    </html>
+"""
+
+## home(req) -> the HTML home page.
+export fn home(_req) = http.html(page("It works", "<p>Edit app.ecko to change this page.</p>"))
+
+## greet(req) -> a JSON greeting for the name in the `:who` path segment.
+export fn greet(req) = http.json({ hello: get(req.params, "who") })
+
+## health(req) -> a plain-text liveness response.
+export fn health(_req) = http.text("ok")
+
+## routes() -> the dispatcher passed to http.serve.
+export fn routes() = web.router(
+    [
+        web.get("/", home),
+        web.get("/hello/:who", greet),
+        web.get("/health", health),
+        web.static("/static", "static"),
+    ],
+)

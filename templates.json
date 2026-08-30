@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "templates": [
+    {
+      "name": "agent",
+      "about": "An AI agent: a @tool the model can call, ai[T] output, and contracts",
+      "next": "ecko main.ecko",
+      "min_ecko": "0.16.0",
+      "files": [
+        { "src": "agent/ecko.json", "dest": "ecko.json", "subst": true },
+        { "src": "agent/README.md", "dest": "README.md", "subst": true },
+        { "src": "agent/app.ecko", "dest": "app.ecko" },
+        { "src": "agent/main.ecko", "dest": "main.ecko" },
+        { "src": "agent/tests/template_test.ecko", "dest": "tests/{name}_test.ecko" }
+      ]
+    },
+    {
+      "name": "web",
+      "about": "A web app: routes, path parameters, static files, and tests",
+      "next": "ecko dev main.ecko",
+      "min_ecko": "0.16.0",
+      "files": [
+        { "src": "web/ecko.json", "dest": "ecko.json", "subst": true },
+        { "src": "web/README.md", "dest": "README.md", "subst": true },
+        { "src": "web/app.ecko", "dest": "app.ecko" },
+        { "src": "web/main.ecko", "dest": "main.ecko" },
+        { "src": "web/static/style.css", "dest": "static/style.css" },
+        { "src": "web/tests/template_test.ecko", "dest": "tests/{name}_test.ecko" }
+      ]
+    },
+    {
+      "name": "sse",
+      "about": "A streaming app: server-sent events over a channel, with a client",
+      "next": "ecko dev main.ecko",
+      "min_ecko": "0.16.0",
+      "files": [
+        { "src": "sse/ecko.json", "dest": "ecko.json", "subst": true },
+        { "src": "sse/README.md", "dest": "README.md", "subst": true },
+        { "src": "sse/app.ecko", "dest": "app.ecko" },
+        { "src": "sse/main.ecko", "dest": "main.ecko" },
+        { "src": "sse/static/index.html", "dest": "static/index.html" },
+        { "src": "sse/tests/template_test.ecko", "dest": "tests/{name}_test.ecko" }
+      ]
+    },
+    {
+      "name": "cli",
+      "about": "A command-line tool: options, a parsed spec, and tests",
+      "next": "ecko main.ecko --help",
+      "min_ecko": "0.16.0",
+      "files": [
+        { "src": "cli/ecko.json", "dest": "ecko.json", "subst": true },
+        { "src": "cli/README.md", "dest": "README.md", "subst": true },
+        { "src": "cli/app.ecko", "dest": "app.ecko" },
+        { "src": "cli/main.ecko", "dest": "main.ecko" },
+        { "src": "cli/tests/template_test.ecko", "dest": "tests/{name}_test.ecko" }
+      ]
+    },
+    {
+      "name": "package",
+      "about": "An importable package: exports, doc comments, example, and tests",
+      "next": "ecko test",
+      "min_ecko": "0.16.0",
+      "files": [
+        { "src": "package/ecko.json", "dest": "ecko.json", "subst": true },
+        { "src": "package/README.md", "dest": "README.md", "subst": true },
+        { "src": "package/LICENSE", "dest": "LICENSE" },
+        { "src": "package/main.ecko", "dest": "main.ecko" },
+        { "src": "package/example.ecko", "dest": "example.ecko" },
+        { "src": "package/tests/template_test.ecko", "dest": "tests/{name}_test.ecko" }
+      ]
+    }
+  ]
+}

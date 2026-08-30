@@ -1,0 +1,18 @@
+# The entry point: read the arguments, run the tool, print the result.
+#
+# TOOL is the name `--help` prints. Change it to your own command name.
+
+import std.cli
+import std.os
+import "./app.ecko"
+
+TOOL = "ecko-tool"
+
+spec = app.spec(TOOL)
+parsed = cli.parse(spec, os.args())
+
+if parsed.help { print(cli.help(spec)) } else {
+    for line in app.greet(parsed.options) {
+        print(line)
+    }
+}

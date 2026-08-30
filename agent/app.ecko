@@ -1,0 +1,50 @@
+# The agent's tools, types and typed calls, kept apart from the code that runs
+# it. All of this works with no API key: `ai` falls back to mock mode, which is
+# deterministic and schema-valid, so the tests below are ordinary tests.
+
+import std.rag
+
+NOTES = [
+    { id: "primitive", text: "Ecko treats ai as a language keyword, not a library." },
+    { id: "offline", text: "With no API key set, ai runs in mock mode and stays deterministic." },
+    {
+        id: "contracts",
+        text: "@requires and @ensures are checked, and a failed ensures retries the call.",
+    },
+]
+
+index = rag.index(NOTES)
+
+## search_notes(query) -> the ids and text of the notes relevant to `query`.
+## The @tool decorator is what lets `ai` call this on its own.
+export @tool("search the product notes for passages relevant to a question")
+fn search_notes(query) {
+    hits = rag.retrieve(index, query, k: 2)
+    { sources: sort(map(hits, fn(h) h.id)), excerpt: join(map(hits, fn(h) h.text), " | ") }
+}
+
+## Urgency is the closed set of answers `triage` is allowed to return.
+export type Urgency = Low | High
+
+## triage(question) -> the urgency of `question`. The `ai[Urgency]` form makes
+## the type the schema: nothing outside the enum can come back.
+export fn triage(question) = ai[Urgency] "Classify the urgency of this question: {question}"
+
+## urgency_label(level) -> a printable label for an `Urgency`. Matching on the
+## enum is how a typed ai result is consumed: every variant must be handled.
+export fn urgency_label(level) = match level {
+    Low => "low"
+    High => "high"
+}
+
+## research(question) -> the evidence the tool gathered: { sources, excerpt }.
+## Passing `using [search_notes]` lets the model call the tool and hand back
+## what it found.
+export fn research(question) = ai "Use search_notes to gather evidence for: {question}" using [search_notes]
+
+## answer(question) -> a short written answer, never empty.
+## @requires guards the input and @ensures guards the output; a violated
+## @ensures retries the call rather than returning something wrong.
+export @requires(question != "")
+@ensures(result != "")
+fn answer(question) = ai "Answer in one sentence: {question}"

@@ -1,0 +1,32 @@
+# Tests for the stream: offline, deterministic, no socket and no waiting.
+
+import std.test
+import "../app.ecko"
+
+test.case("a frame is terminated by a blank line", fn() {
+    test.eq(app.frame("hello"), "data: hello\n\n")
+})
+
+test.case("feed sends every tick and then closes", fn() {
+    ch = channel()
+    app.feed(ch, 3, 0)
+    frames = []
+    for f in ch {
+        frames = push(frames, f)
+    }
+    test.eq(len(frames), 4)
+    test.eq(first(frames), "data: tick 1\n\n")
+    test.eq(last(frames), "data: done\n\n")
+})
+
+test.case("the events route is marked as a stream", fn() {
+    r = app.events({ method: "GET", path: "/events", headers: {}, params: {} })
+    test.eq(r.status, 200)
+    test.eq(get(r.headers, "content-type"), "text/event-stream")
+})
+
+test.case("the client page is served at the root", fn() {
+    r = app.routes()({ method: "GET", path: "/", headers: {}, params: {} })
+    test.eq(r.status, 200)
+    test.ok(contains(r.body, "EventSource"))
+})

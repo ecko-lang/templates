@@ -1,0 +1,30 @@
+# Tests for the tool's logic: offline, deterministic, no argv and no exits.
+
+import std.cli
+import std.test
+import "../app.ecko"
+
+spec = app.spec("greet")
+
+test.case("defaults apply when nothing is passed", fn() {
+    r = cli.parse(spec, [])
+    test.eq(r.options.name, "world")
+    test.eq(r.options.count, 1)
+    test.eq(r.options.loud, false)
+})
+
+test.case("short and long option forms both parse", fn() {
+    r = cli.parse(spec, ["-n", "Ada", "--count", "2", "--loud"])
+    test.eq(r.options.name, "Ada")
+    test.eq(r.options.count, 2)
+    test.eq(r.options.loud, true)
+})
+
+test.case("greet repeats the line and can shout", fn() {
+    test.eq(app.greet({ name: "Ada", count: 2, loud: false }), ["Hello, Ada!", "Hello, Ada!"])
+    test.eq(app.greet({ name: "Ada", count: 1, loud: true }), ["HELLO, ADA!"])
+})
+
+test.case("--help is reported rather than parsed", fn() {
+    test.eq(cli.parse(spec, ["--help"]).help, true)
+})

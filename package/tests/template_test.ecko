@@ -1,0 +1,21 @@
+# Tests for the package: offline and deterministic, and excluded from the
+# published archive because they live in tests/ rather than at the root.
+
+import std.test
+import "../main.ecko"
+
+pkg = main
+
+test.case("slugify lowercases and joins with hyphens", fn() {
+    test.eq(pkg.slugify("Hello, World!"), "hello-world")
+    test.eq(pkg.slugify("  Ecko   2026  "), "ecko-2026")
+    test.eq(pkg.slugify("!!!"), "")
+})
+
+test.case("excerpt keeps short text untouched", fn() {
+    test.eq(pkg.excerpt("short", 20), "short")
+})
+
+test.case("excerpt cuts on a word boundary", fn() {
+    test.eq(pkg.excerpt("the quick brown fox", 12), "the quick...")
+})

@@ -1,0 +1,14 @@
+# The entry point: ask one question and print what came back.
+#
+#   ecko main.ecko                       offline, mock mode, deterministic
+#   ECKO_API_KEY=sk-... ecko main.ecko   the same code against a real provider
+
+import "./app.ecko"
+
+question = "How does Ecko run AI without an API key?"
+evidence = app.research(question)
+
+print("Q: {question}")
+print("urgency: {app.urgency_label(app.triage(question))}")
+print("sources: {evidence.sources}")
+print("A: {app.answer(question)}")

@@ -1,0 +1,79 @@
+# Gates every template against the released ecko.
+#
+# The weekly schedule is the one that matters. Nobody pushes here between
+# releases, so a push trigger cannot see a template going red because a new
+# ecko changed the formatter. That is how cookies, smtp-client, inflect and
+# webkit all drifted after 0.13.0.
+name: test
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ecko
+        run: |
+          curl -fsSL https://ecko.sh/install | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Version
+        run: ecko --version
+
+      - name: Validate templates.json against the tree
+        run: |
+          set -u
+          fail=0
+          jq -e '.schema == 1' templates.json > /dev/null || { echo "schema must be 1"; fail=1; }
+
+          # Every template declares min_ecko.
+          for name in $(jq -r '.templates[].name' templates.json); do
+            jq -e --arg n "$name" \
+              '.templates[] | select(.name==$n) | has("min_ecko")' templates.json > /dev/null \
+              || { echo "$name: no min_ecko"; fail=1; }
+          done
+
+          # Every src exists, every dest stays inside the project, and no Ecko
+          # source is substituted: `{` starts string interpolation in Ecko, so a
+          # substituted .ecko file would stop being a valid program.
+          while read -r src dest subst; do
+            [ -f "$src" ] || { echo "missing src: $src"; fail=1; }
+            case "$dest" in
+              /*) echo "absolute dest: $dest"; fail=1 ;;
+              *..*) echo "escaping dest: $dest"; fail=1 ;;
+            esac
+            case "$dest" in
+              *.ecko)
+                [ "$subst" = "true" ] && { echo "substituted ecko source: $dest"; fail=1; }
+                ;;
+            esac
+          done < <(jq -r '.templates[].files[] | "\(.src) \(.dest) \(.subst // false)"' templates.json)
+
+          exit $fail
+
+      - name: Format, check and test every template
+        run: |
+          set -u
+          fail=0
+          for dir in $(jq -r '.templates[].name' templates.json); do
+            echo "== $dir =="
+            mapfile -t files < <(find "$dir" -name '*.ecko' | sort)
+            ecko fmt --check "${files[@]}" || fail=1
+            ecko check --strict "${files[@]}" || fail=1
+            # `ecko test` discovers tests/ relative to the working directory,
+            # and the sse template reads static/index.html the same way.
+            ( cd "$dir" && ecko test ) || fail=1
+            entry="$dir/app.ecko"
+            [ -f "$entry" ] || entry="$dir/main.ecko"
+            if ecko doc "$entry" | grep -q 'Undocumented'; then
+              echo "$dir: an export has no ## comment"
+              fail=1
+            fi
+          done
+          exit $fail

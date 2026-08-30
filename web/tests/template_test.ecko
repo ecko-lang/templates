@@ -1,0 +1,29 @@
+# Tests for the routes: offline, deterministic, no socket. The router is a
+# plain function, so each case is one call with a request map.
+
+import std.test
+import "../app.ecko"
+
+router = app.routes()
+
+fn request(method, path) = { method: method, path: path, headers: {}, params: {} }
+
+test.case("the home page renders HTML", fn() {
+    r = router(request("GET", "/"))
+    test.eq(r.status, 200)
+    test.ok(contains(r.body, "<h1>It works</h1>"))
+})
+
+test.case("a path parameter reaches the handler", fn() {
+    r = router(request("GET", "/hello/ada"))
+    test.eq(r.status, 200)
+    test.eq(json_decode(r.body), { hello: "ada" })
+})
+
+test.case("the health route answers in plain text", fn() {
+    test.eq(router(request("GET", "/health")).body, "ok")
+})
+
+test.case("an unknown path is a 404", fn() {
+    test.eq(router(request("GET", "/nope")).status, 404)
+})

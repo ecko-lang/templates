@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Live events</title></head>
+<body>
+<h1>Live events</h1>
+<ul id="log"></ul>
+<script>
+  const log = document.getElementById("log");
+  const source = new EventSource("/events");
+  source.onmessage = (e) => {
+    const li = document.createElement("li");
+    li.textContent = e.data;
+    log.appendChild(li);
+    if (e.data === "done") source.close();
+  };
+</script>
+</body>
+</html>
