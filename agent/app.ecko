@@ -26,6 +26,12 @@ fn search_notes(query) {
 ## Urgency is the closed set of answers `triage` is allowed to return.
 export type Urgency = Low | High
 
+## Evidence is the shape `research` returns. Typing it matters: an UNTYPED
+## `ai ... using [tools]` gives the tool's own return value in mock mode and
+## the model's prose against a real provider, so the same code would hand back
+## a map offline and a string online. Naming the type makes both coerce to it.
+export type Evidence = Found { sources: List<String>, excerpt: String }
+
 ## triage(question) -> the urgency of `question`. The `ai[Urgency]` form makes
 ## the type the schema: nothing outside the enum can come back.
 export fn triage(question) = ai[Urgency] "Classify the urgency of this question: {question}"
@@ -40,7 +46,7 @@ export fn urgency_label(level) = match level {
 ## research(question) -> the evidence the tool gathered: { sources, excerpt }.
 ## Passing `using [search_notes]` lets the model call the tool and hand back
 ## what it found.
-export fn research(question) = ai "Use search_notes to gather evidence for: {question}" using [search_notes]
+export fn research(question) = ai[Evidence] "Use search_notes to gather evidence for: {question}" using [search_notes]
 
 ## answer(question) -> a short written answer, never empty.
 ## @requires guards the input and @ensures guards the output; a violated

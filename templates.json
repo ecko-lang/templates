@@ -5,7 +5,7 @@
       "name": "agent",
       "about": "An AI agent: a @tool the model can call, ai[T] output, and contracts",
       "next": "ecko main.ecko",
-      "min_ecko": "0.17.0",
+      "min_ecko": "0.18.0",
       "files": [
         { "src": "agent/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "agent/README.md", "dest": "README.md", "subst": true },
