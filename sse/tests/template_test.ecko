@@ -10,7 +10,7 @@ test.case("a frame is terminated by a blank line", fn() {
 test.case("feed sends every tick and then closes", fn() {
     ch = channel()
     app.feed(ch, 3, 0)
-    frames = []
+    mut frames = []
     for f in ch {
         frames = push(frames, f)
     }

@@ -17,7 +17,7 @@ export fn spec(name) = {
 
 ## greet(options) -> the greeting lines for a parsed `options` map, as a list.
 export fn greet(options) {
-    line = "Hello, {options.name}!"
-    if options.loud { line = str.upper(line) }
+    plain = "Hello, {options.name}!"
+    line = if options.loud { str.upper(plain) } else { plain }
     map(range(0, options.count), fn(_) line)
 }

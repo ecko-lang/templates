@@ -23,7 +23,7 @@ export fn slugify(text) = join(re.find_all(r"[a-z0-9]+", lower(text)), "-")
 export fn excerpt(text, limit) {
     if len(text) <= limit { return text }
     words = split(text, " ")
-    out = ""
+    mut out = ""
     for w in words {
         if len(out) + len(w) + 1 > limit { break }
         out = if out == "" { w } else { out + " " + w }
