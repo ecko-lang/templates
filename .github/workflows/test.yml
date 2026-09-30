@@ -57,23 +57,37 @@ jobs:
 
           exit $fail
 
-      - name: Format, check and test every template
+      # Gate what a user gets, not the raw sources: `ecko scaffold` each
+      # template out of this checkout, then format-check, check, test and doc
+      # the result. The raw package manifest holds `github.com/you/{name}`,
+      # which `ecko check` rightly refuses as a module path; only a scaffolded
+      # copy, with the placeholders filled in, is a real project. The .ecko
+      # sources are never substituted (see above), so checking the copy checks
+      # them byte for byte.
+      - name: Scaffold, then format, check and test every template
         run: |
           set -u
           fail=0
-          for dir in $(jq -r '.templates[].name' templates.json); do
-            echo "== $dir =="
-            mapfile -t files < <(find "$dir" -name '*.ecko' | sort)
-            ecko fmt --check "${files[@]}" || fail=1
-            ecko check --strict "${files[@]}" || fail=1
+          work=$(mktemp -d)
+          export ECKO_TEMPLATES_REPO="$PWD" ECKO_TEMPLATES_DIR="$work/.cache"
+          for name in $(jq -r '.templates[].name' templates.json); do
+            echo "== $name =="
+            dir="$work/demo_$name"
+            ecko scaffold "$name" "$dir" > /dev/null || { fail=1; continue; }
             # `ecko test` discovers tests/ relative to the working directory,
             # and the sse template reads static/index.html the same way.
-            ( cd "$dir" && ecko test ) || fail=1
-            entry="$dir/app.ecko"
-            [ -f "$entry" ] || entry="$dir/main.ecko"
-            if ecko doc "$entry" | grep -q 'Undocumented'; then
-              echo "$dir: an export has no ## comment"
-              fail=1
-            fi
+            (
+              cd "$dir"
+              mapfile -t files < <(find . -name '*.ecko' -not -path './vendor/*' | sort)
+              ecko fmt --check "${files[@]}" || exit 1
+              ecko check --strict "${files[@]}" || exit 1
+              ecko test || exit 1
+              entry=app.ecko
+              [ -f "$entry" ] || entry=main.ecko
+              if ecko doc "$entry" | grep -q 'Undocumented'; then
+                echo "$name: an export has no ## comment"
+                exit 1
+              fi
+            ) || fail=1
           done
           exit $fail

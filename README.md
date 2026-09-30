@@ -184,20 +184,29 @@ because that is the convention `import` expects.
 3. Set `min_ecko` to the oldest release the template actually works on. If it
    needs syntax that is not released yet, set it to the release that will have
    it.
-4. Run the gates locally. These are the same ones CI runs:
+4. Run the gates locally. These are the same ones CI runs, on a project
+   scaffolded out of this checkout rather than on the raw sources:
 
 ```bash
-dir=mytemplate
-files=$(find "$dir" -name '*.ecko' | sort)
+name=mytemplate
+work=$(mktemp -d)
+ECKO_TEMPLATES_REPO="$PWD" ECKO_TEMPLATES_DIR="$work/.cache" \
+  ecko scaffold "$name" "$work/demo"
+cd "$work/demo"
+files=$(find . -name '*.ecko' -not -path './vendor/*' | sort)
 ecko fmt --check $files
 ecko check --strict $files
-( cd "$dir" && ecko test )
-entry="$dir/app.ecko"; [ -f "$entry" ] || entry="$dir/main.ecko"
+ecko test
+entry=app.ecko; [ -f "$entry" ] || entry=main.ecko
 ecko doc "$entry" | grep Undocumented && echo "an export needs a ## comment"
 ```
 
-Run `ecko test` from inside the template directory. Test discovery is relative
-to the working directory, and the `sse` template reads `static/index.html` the
+Gate the scaffolded copy, not the template directory. A template's
+`ecko.json` holds placeholders - `github.com/you/{name}` - that `ecko check`
+rightly refuses as a module path, and only `ecko scaffold` fills them in. It
+also exercises `templates.json` itself: a wrong `src` or `dest` fails here.
+Run `ecko test` from inside the project, since test discovery is relative to
+the working directory and the `sse` template reads `static/index.html` the
 same way. The `entry` line matters for `package`, which has no `app.ecko`.
 
 ## Rules that are easy to get wrong
@@ -234,8 +243,10 @@ That is how four stdlib packages drifted after 0.13.0.
 
 It installs the released ecko, validates `templates.json` against the tree
 (every `src` exists, every `dest` stays inside the project, no `.ecko` is
-substituted, every template declares `min_ecko`), then runs `ecko fmt --check`,
-`ecko check --strict`, `ecko test` and the documented-exports check on all five.
+substituted, every template declares `min_ecko`), then scaffolds each template
+from the checkout with `ecko scaffold` and runs `ecko fmt --check`,
+`ecko check --strict`, `ecko test` and the documented-exports check on each
+scaffolded project.
 
 ## The `cli` template is mirrored in core
 
