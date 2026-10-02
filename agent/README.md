@@ -12,7 +12,7 @@ That works with no API key. `ai` falls back to mock mode, which is
 deterministic and schema-valid, so the program runs and the tests pass offline.
 To use a real provider:
 
-    ECKO_API_KEY=sk-... ecko main.ecko
+    ECKO_AI_API_KEY=sk-... ecko main.ecko
 
 The code does not change between the two.
 
@@ -35,4 +35,4 @@ error.
     ecko test
 
 `ecko test` forces mock mode, so the cases stay offline and deterministic even
-when `ECKO_API_KEY` is set.
+when `ECKO_AI_API_KEY` is set.

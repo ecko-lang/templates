@@ -2,7 +2,7 @@
 #
 # TOOL is the name `--help` prints. Change it to your own command name.
 
-import std.cli
+import cli
 import std.os
 import "./app.ecko"
 

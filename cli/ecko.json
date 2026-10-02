@@ -3,5 +3,7 @@
   "version": "0.1.0",
   "entrypoint": "main.ecko",
   "capabilities": [],
-  "dependencies": {}
+  "dependencies": {
+    "cli": "github.com/ecko-lang/cli@v1.0.0"
+  }
 }

@@ -1,7 +1,7 @@
 # The entry point: ask one question and print what came back.
 #
 #   ecko main.ecko                       offline, mock mode, deterministic
-#   ECKO_API_KEY=sk-... ecko main.ecko   the same code against a real provider
+#   ECKO_AI_API_KEY=sk-... ecko main.ecko   the same code against a real provider
 
 import "./app.ecko"
 

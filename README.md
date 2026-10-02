@@ -79,7 +79,7 @@ ECKO_TEMPLATES_REPO=~/my-templates ecko scaffold internal-service svc
 An AI agent: a tool the model can call, a typed answer, and a contract on the
 output. It runs with **no API key**. `ai` falls back to mock mode, which is
 deterministic and schema-valid, so the program runs and the tests pass offline.
-Set `ECKO_API_KEY` to point the same code at a real provider. The code does not
+Set `ECKO_AI_API_KEY` to point the same code at a real provider. The code does not
 change between the two.
 
 Worth reading in `app.ecko`: `search_notes` is marked `@tool`, which is what

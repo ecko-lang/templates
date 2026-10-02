@@ -2,7 +2,7 @@
 # it. All of this works with no API key: `ai` falls back to mock mode, which is
 # deterministic and schema-valid, so the tests below are ordinary tests.
 
-import std.rag
+import std.str
 
 NOTES = [
     { id: "primitive", text: "Ecko treats ai as a language keyword, not a library." },
@@ -13,13 +13,27 @@ NOTES = [
     },
 ]
 
-index = rag.index(NOTES)
+# Retrieval in a few lines over two builtins: `embed` turns text into a
+# vector and `cosine` compares two. The score also counts shared words, which
+# keeps the ranking sensible offline, where mock-mode embeddings are a hash
+# rather than meaning. Swap in a vector database when the notes outgrow a list.
+index = map(NOTES, fn(n) merge(n, { vec: embed(n.text) }))
+
+fn words(text) = filter(str.split(str.lower(text), " "), fn(w) w != "")
+
+fn score(note, query, qvec) {
+    q = words(query)
+    shared = len(filter(words(note.text), fn(w) contains(q, w)))
+    cosine(qvec, note.vec) + float(shared) / float(max([len(q), 1]))
+}
 
 ## search_notes(query) -> the ids and text of the notes relevant to `query`.
 ## The @tool decorator is what lets `ai` call this on its own.
 export @tool("search the product notes for passages relevant to a question")
 fn search_notes(query) {
-    hits = rag.retrieve(index, query, k: 2)
+    qvec = embed(query)
+    ranked = sort_by(index, fn(n) 0.0 - score(n, query, qvec))
+    hits = ranked[..2]
     { sources: sort(map(hits, fn(h) h.id)), excerpt: join(map(hits, fn(h) h.text), " | ") }
 }
 

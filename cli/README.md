@@ -16,6 +16,9 @@ generated usage text, and tests that never touch argv.
 - `main.ecko` reads the arguments and prints the result. Change `TOOL` there to
   your own command name.
 - `tests/{name}_test.ecko` runs offline.
+- `vendor/` holds the [cli](https://github.com/ecko-lang/cli) package the
+  parsing comes from, so this runs offline as soon as it is scaffolded.
+  `ecko get github.com/ecko-lang/cli` updates it.
 
 ## Test it
 

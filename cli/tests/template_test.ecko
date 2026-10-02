@@ -1,6 +1,6 @@
 # Tests for the tool's logic: offline, deterministic, no argv and no exits.
 
-import std.cli
+import cli
 import std.test
 import "../app.ecko"
 

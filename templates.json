@@ -32,7 +32,7 @@
       "name": "sse",
       "about": "A streaming app: server-sent events over a channel, with a client",
       "next": "ecko dev main.ecko",
-      "min_ecko": "0.17.0",
+      "min_ecko": "0.58.0",
       "files": [
         { "src": "sse/ecko.json", "dest": "ecko.json", "subst": true },
         { "src": "sse/README.md", "dest": "README.md", "subst": true },
@@ -52,6 +52,8 @@
         { "src": "cli/README.md", "dest": "README.md", "subst": true },
         { "src": "cli/app.ecko", "dest": "app.ecko" },
         { "src": "cli/main.ecko", "dest": "main.ecko" },
+        { "src": "cli/vendor/github.com/ecko-lang/cli/ecko.json", "dest": "vendor/github.com/ecko-lang/cli/ecko.json" },
+        { "src": "cli/vendor/github.com/ecko-lang/cli/main.ecko", "dest": "vendor/github.com/ecko-lang/cli/main.ecko" },
         { "src": "cli/tests/template_test.ecko", "dest": "tests/{name}_test.ecko" }
       ]
     },
