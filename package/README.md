@@ -6,9 +6,10 @@ A package written in Ecko: text helpers for building URLs and previews.
 
 Two things in `ecko.json` are placeholders:
 
-- `module` is `github.com/you/{name}`. Replace `you` with your own owner. The
-  last segment has to stay `{name}`, because that is what becomes the directory
-  the package vendors into and the name people `import`.
+- `module` is `github.com/you/{name}`. Replace `you` with your own owner. A
+  fetched package's `module` must equal the path it was fetched from, so this
+  is the repo you publish to. It vendors at `vendor/github.com/you/{name}/`,
+  and its last segment is the name people `import`.
 - `description` and `LICENSE` describe the example code. Replace both.
 
 ## Install
@@ -21,6 +22,10 @@ Two things in `ecko.json` are placeholders:
 
     {name}.slugify("Hello, World!")        # "hello-world"
     {name}.excerpt("a long sentence", 10)  # "a long..."
+
+`ecko get` binds the last segment of the path, with `-` turned into `_` so it
+is a valid name (`my-pkg` imports as `my_pkg`), unless the importer picks
+another with `--as`.
 
 `ecko example.ecko` runs the package straight from this directory, with no
 install step.

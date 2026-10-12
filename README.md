@@ -13,8 +13,9 @@ program. These are for when you would rather edit something that works than
 start from an empty file.
 
 `ecko scaffold` is the command that writes them, and you can copy one by hand
-instead. All five need ecko 0.17.0 or newer, which is the release `ecko scaffold`
-itself ships in.
+instead. Four of the five need ecko 0.17.0 or newer, which is the release
+`ecko scaffold` itself ships in; `sse` needs 0.58.0. Each template's `min_ecko`
+in `templates.json` is the exact floor.
 
 ## The five templates
 
