@@ -5,5 +5,8 @@
   "capabilities": [
     "net"
   ],
-  "dependencies": {}
+  "dependencies": {},
+  "embed": [
+    "static/**"
+  ]
 }

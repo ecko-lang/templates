@@ -14,6 +14,10 @@ Then open http://localhost:8080. `ecko dev` restarts it whenever you save. Set
 Run it from this directory: the static route resolves `static/` against the
 working directory.
 
+`ecko build main.ecko -o app` makes one executable that carries `static/` too
+(`"embed"` in `ecko.json`), so `app` serves its stylesheet wherever you copy
+it.
+
 ## Layout
 
 - `app.ecko` holds the routes and handlers. It binds no port, which is what
